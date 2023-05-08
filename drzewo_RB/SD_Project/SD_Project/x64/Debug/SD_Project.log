@@ -1,12 +1,2 @@
 ﻿  Node.cpp
-C:\Users\zuzka\OneDrive\Pulpit\Studia\Sem4\Struktury danych\drzewo_RB\SD_Project\SD_Project\Node.cpp(53): warning C4661: "Node<int>::Node(void)": brak odpowiedniej definicji dostarczonej dla jawnego żądania utworzenia wystąpienia szablonu
-C:\Users\zuzka\OneDrive\Pulpit\Studia\Sem4\Struktury danych\drzewo_RB\SD_Project\SD_Project\Node.h(15): message : zobacz deklarację „Node<int>::Node”
-C:\Users\zuzka\OneDrive\Pulpit\Studia\Sem4\Struktury danych\drzewo_RB\SD_Project\SD_Project\Node.cpp(53): warning C4661: "Node<int>::~Node(void)": brak odpowiedniej definicji dostarczonej dla jawnego żądania utworzenia wystąpienia szablonu
-C:\Users\zuzka\OneDrive\Pulpit\Studia\Sem4\Struktury danych\drzewo_RB\SD_Project\SD_Project\Node.h(16): message : zobacz deklarację „Node<int>::~Node”
-C:\Users\zuzka\OneDrive\Pulpit\Studia\Sem4\Struktury danych\drzewo_RB\SD_Project\SD_Project\Node.cpp(30): warning C4661: "Node<int>::Node(void)": brak odpowiedniej definicji dostarczonej dla jawnego żądania utworzenia wystąpienia szablonu
-C:\Users\zuzka\OneDrive\Pulpit\Studia\Sem4\Struktury danych\drzewo_RB\SD_Project\SD_Project\Node.h(15): message : zobacz deklarację „Node<int>::Node”
-C:\Users\zuzka\OneDrive\Pulpit\Studia\Sem4\Struktury danych\drzewo_RB\SD_Project\SD_Project\Node.cpp(30): warning C4661: "Node<int>::~Node(void)": brak odpowiedniej definicji dostarczonej dla jawnego żądania utworzenia wystąpienia szablonu
-C:\Users\zuzka\OneDrive\Pulpit\Studia\Sem4\Struktury danych\drzewo_RB\SD_Project\SD_Project\Node.h(16): message : zobacz deklarację „Node<int>::~Node”
-  SD_Project.cpp
-  Generowanie kodu...
-  SD_Project.vcxproj -> C:\Users\zuzka\OneDrive\Pulpit\Studia\Sem4\Struktury danych\drzewo_RB\SD_Project\x64\Debug\SD_Project.exe
+  SD_Project.vcxproj -> C:\Users\zuzka\OneDrive\Pulpit\Studia\Sem4\Struktury danych\Struktury-Danych-Projekt\drzewo_RB\SD_Project\x64\Debug\SD_Project.exe

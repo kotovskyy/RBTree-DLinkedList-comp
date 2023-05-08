@@ -1,6 +1,19 @@
 #include "Node.h"
 
 template<class T>
+Node<T>::Node() {
+	this->value = 0;
+	this->color = 0;
+	this->parent = nullptr;
+	this->left = nullptr;
+	this->right = nullptr;
+
+}
+
+template<class T>
+Node<T>::~Node() {}
+
+template<class T>
 void Node<T>::setValue(T value) {
 	this->value = value;
 }
