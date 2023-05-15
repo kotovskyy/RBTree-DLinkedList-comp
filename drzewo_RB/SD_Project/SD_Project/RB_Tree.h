@@ -4,16 +4,16 @@
 
 template<class T>
 class RB_Tree {
-	Node<T>* root;
+	Node<T>* root;								// korzen drzewa
 public:
-	RB_Tree();						// konstruktor
-	~RB_Tree();						// dekonstruktor
+	RB_Tree();									// konstruktor
+	~RB_Tree();									// dekonstruktor
 
-	void insert(Node<T> * node);	// dodaje 
-	void remove(Node<T>* node);		// usuwa
-	void search(T key);				// szuka
-	void leftRotation(Node<T>* x);	// rotuje w lewo
-	void rightRotation(Node<T>* x);	// rotuje w prawo
+	void insert(Node<T> * node);				// dodaje 
+	void remove(Node<T>* node);					// usuwa
+	void search(T key);							// szuka
+	void leftRotation(Node<T>* x);				// rotuje w lewo
+	void rightRotation(Node<T>* x);				// rotuje w prawo
 	void fixAfterInsert(Node<T>* x);			// napiawia po dodaniu
 	void fixAfterRemove(Node<T>* x);			// naprawia po usuwaniu
 

@@ -4,6 +4,6 @@ using namespace std;
 
 int main()
 {
-    std::cout << "Projekt struktury danych\n";
+    std::cout << "Zapisane w zuza1\n";
 }
 
