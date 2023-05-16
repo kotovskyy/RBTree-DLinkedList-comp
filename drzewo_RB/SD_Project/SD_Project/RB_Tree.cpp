@@ -4,6 +4,9 @@
 template<class T>
 RB_Tree<T>::RB_Tree() {
 	root = nullptr;
+	nil->setColor(0);
+	nil->setLeft(nullptr);
+	nil->setRight(nullptr);
 }
 
 template<class T>
@@ -11,7 +14,29 @@ RB_Tree<T>::~RB_Tree() {}
 
 template<class T>
 void RB_Tree<T>::insert(Node<T>* node){
-	
+	Node<T>* y = nil;
+	Node<T>* x = root;
+	while (x != nil) {
+		y = x;
+		if (node->getValue() < x->getValue()) {
+			x = x->getLeft();
+		}
+		else {
+			x = x->getRight();
+		}
+	}
+	node->setParent(y);
+	if (y == nil) {
+		root = node;
+	}
+	else if (node->getValue() < y->getValue()) {
+		y->setLeft(node);
+	}
+	else {
+		y->setRight(node);
+	}
+	node->setColor(1);
+	fixAfterInsert(node);
 }
 
 template<class T>

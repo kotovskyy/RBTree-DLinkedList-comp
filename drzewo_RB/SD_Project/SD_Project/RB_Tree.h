@@ -5,6 +5,7 @@
 template<class T>
 class RB_Tree {
 	Node<T>* root;								// korzen drzewa
+	Node<T>* nil;								// lisc drzewa
 public:
 	RB_Tree();									// konstruktor
 	~RB_Tree();									// dekonstruktor
