@@ -4,21 +4,22 @@
 template<class T>
 RB_Tree<T>::RB_Tree() {
 	root = nullptr;
-	nil->setColor(0);
-	nil->setLeft(nullptr);
-	nil->setRight(nullptr);
 }
 
 template<class T>
 RB_Tree<T>::~RB_Tree() {}
 
 template<class T>
+Node<T>* RB_Tree<T>::getRoot() {
+	return root;
+}
+template<class T>
 void RB_Tree<T>::insert(T value){
 	Node<T>* node = new Node<T>();			//tworzy nody node
 	node->setValue(value);					// nadaje mu wartosc 
-	Node<T>* y = nil;						// node pomocniczy
+	Node<T>* y = nullptr;						// node pomocniczy
 	Node<T>* x = root;						// wskaznik na root
-	while (x != nil) {						// dopuki x jest jest lisciem
+	while (!(x == nullptr)) {						// dopuki x jest jest lisciem
 		y = x;								
 		if (node->getValue() < x->getValue()) {	// jesli wartoœc dodawanego noda jest mniejsza to ptrzesun w lewo
 			x = x->getLeft();
@@ -28,7 +29,7 @@ void RB_Tree<T>::insert(T value){
 		}
 	}
 	node->setParent(y);					// ustaw y jako rodzica
-	if (y == nil) {								// jesli y == 0 to nowy node jest korzeniem
+	if (y == nullptr) {								// jesli y == 0 to nowy node jest korzeniem
 		root = node;
 	}
 	else if (node->getValue() < y->getValue()) {	// jesli wartoœc dodawanego noda jest mniejsza od rodzica to jest lewym synam	
@@ -38,6 +39,8 @@ void RB_Tree<T>::insert(T value){
 		y->setRight(node);
 	}
 	node->setColor(1);				// ustaw kolor dodanego noda na czerwony
+	node->setLeft(nullptr);
+	node->setRight(nullptr);
 	fixAfterInsert(node);				// napraw drzewo
 }
 
@@ -98,37 +101,47 @@ void RB_Tree<T>::rightRotation(Node<T>* x) {
 template<class T>
 void RB_Tree<T>::fixAfterInsert(Node<T>* node) {
 
-	while (node->getParent()->getColor() == 1) {			//pêtla jesli rodzic jest czerwony to wykonaj
-		Node<T>* y = nil;		//node pomoczniczy
+	while ((root != node) && (node->getParent()->getColor() == 1)) {			//pêtla jesli rodzic jest czerwony to wykonaj
+		Node<T>* y = nullptr;		//node pomoczniczy
 //==============JESLI JEST LEWYM SYNEM=======================
 		if (node->getParent() == node->getParent()->getParent()->getLeft()) {		// jesli node jest lewym synem 
 			y = node->getParent()->getParent()->getRight();							// ustawiamy y jako stryja
-			if (y->getColor() == 1) {												// streyj jest czerwony
+			if (y != nullptr && y->getColor() == 1) {												// streyj jest czerwony
 				node->getParent()->setColor(0);								// ustawia ojca na czarno
 				y->setColor(0);												// ustawia stryja na czarano
 				node->getParent()->getParent()->setColor(1);					// ustawia dzidka na czerwono
 				node = node->getParent()->getParent();								// zmienia wskaznik aktualne wezla odniesienia na dziadka
 			}
-			else if (node == node->getParent()->getRight()) {						// 
-				node = node->getParent();
-				leftRotation(node);
+			else {
+				if (node == node->getParent()->getRight()) {						// 
+					node = node->getParent();
+					leftRotation(node);
+				}
 				node->getParent()->setColor(0);
 				node->getParent()->getParent()->setColor(1);
 				rightRotation(node->getParent()->getParent());
 			}
 		}
-
 //==============JESLI JEST PRAWYM SYNEM=======================
 		else if (node->getParent() == node->getParent()->getParent()->getRight()) {	// jesli node jest prawym synem 
 			y = node->getParent()->getParent()->getLeft();							// ustawiamy y jako stryja
-			if (y->getColor() == 1) {												// streyj jest czerwony
+			if (y != nullptr && y->getColor() == 1) {												// streyj jest czerwony
 				node->getParent()->setColor(0);								// ustawia ojca na czarno
 				y->setColor(0);												// ustawia stryja na czarano
 				node->getParent()->getParent()->setColor(1);					// ustawia dzidka na czerwono
 				node = node->getParent()->getParent();								// zmienia wskaznik aktualne wezla odniesienia na dziadka
 			}
+			else {
+				if (node == node->getParent()->getLeft()) {
+					node = node->getParent();
+					rightRotation(node);
+				}
+				node->getParent()->setColor(0);
+				node->getParent()->getParent()->setColor(1);
+				leftRotation(node->getParent()->getParent());
+			}
 		}
-	}
+	}                                                                                                                                                                                                      
 	root->setColor(0);	//root musi byc czarny
 }
 

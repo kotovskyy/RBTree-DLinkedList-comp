@@ -5,12 +5,12 @@
 template<class T>
 class RB_Tree {
 	Node<T>* root;								// korzen drzewa
-	Node<T>* nil;								// lisc drzewa
+	//Node<T>* nil;								// lisc drzewa
 public:
 	RB_Tree();									// konstruktor
 	~RB_Tree();									// dekonstruktor
-
-	void insert(T value);				// dodaje 
+	Node<T>* getRoot();							// getter roota
+	void insert(T value);						// dodaje 
 	void remove(Node<T>* node);					// usuwa
 	void search(T key);							// szuka
 	void leftRotation(Node<T>* x);				// rotuje w lewo
