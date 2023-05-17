@@ -21,10 +21,10 @@ void RB_Tree<T>::insert(T value){
 	Node<T>* x = root;						// wskaznik na root
 	while (!(x == nullptr)) {						// dopuki x jest jest lisciem
 		y = x;								
-		if (node->getValue() < x->getValue()) {	// jesli wartoœc dodawanego noda jest mniejsza to ptrzesun w lewo
+		if (node->getValue() < x->getValue()) {	// jesli wartoÅ“c dodawanego noda jest mniejsza to ptrzesun w lewo
 			x = x->getLeft();
 		}
-		else {									 // jesli wartoœc dodawanego noda jest wieksza to ptrzesun w prawo
+		else {									 // jesli wartoÅ“c dodawanego noda jest wieksza to ptrzesun w prawo
 			x = x->getRight();
 		}
 	}
@@ -32,10 +32,10 @@ void RB_Tree<T>::insert(T value){
 	if (y == nullptr) {								// jesli y == 0 to nowy node jest korzeniem
 		root = node;
 	}
-	else if (node->getValue() < y->getValue()) {	// jesli wartoœc dodawanego noda jest mniejsza od rodzica to jest lewym synam	
+	else if (node->getValue() < y->getValue()) {	// jesli wartoÅ“c dodawanego noda jest mniejsza od rodzica to jest lewym synam	
 		y->setLeft(node);
 	}
-	else {											// jesli wartoœc dodawanego noda jest wieksza od rodzica to jest prawym synam
+	else {											// jesli wartoÅ“c dodawanego noda jest wieksza od rodzica to jest prawym synam
 		y->setRight(node);
 	}
 	node->setColor(1);				// ustaw kolor dodanego noda na czerwony
@@ -101,7 +101,7 @@ void RB_Tree<T>::rightRotation(Node<T>* x) {
 template<class T>
 void RB_Tree<T>::fixAfterInsert(Node<T>* node) {
 
-	while ((root != node) && (node->getParent()->getColor() == 1)) {			//pêtla jesli rodzic jest czerwony to wykonaj
+	while ((root != node) && (node->getParent()->getColor() == 1)) {			//pÃªtla jesli rodzic jest czerwony to wykonaj
 		Node<T>* y = nullptr;		//node pomoczniczy
 //==============JESLI JEST LEWYM SYNEM=======================
 		if (node->getParent() == node->getParent()->getParent()->getLeft()) {		// jesli node jest lewym synem 
@@ -113,13 +113,13 @@ void RB_Tree<T>::fixAfterInsert(Node<T>* node) {
 				node = node->getParent()->getParent();								// zmienia wskaznik aktualne wezla odniesienia na dziadka
 			}
 			else {
-				if (node == node->getParent()->getRight()) {						// 
-					node = node->getParent();
-					leftRotation(node);
+				if (node == node->getParent()->getRight()) {						// jesli node jest prawym synem  
+					node = node->getParent();							// przypisz aktualny node rodzicowi
+					leftRotation(node);								// wykonaj lewa rotacje
 				}
-				node->getParent()->setColor(0);
-				node->getParent()->getParent()->setColor(1);
-				rightRotation(node->getParent()->getParent());
+				node->getParent()->setColor(0);								// rodzic ma kolor czarny
+				node->getParent()->getParent()->setColor(1);						// dziadek ma czerwony
+				rightRotation(node->getParent()->getParent());						// rotuje w prawo
 			}
 		}
 //==============JESLI JEST PRAWYM SYNEM=======================
@@ -132,13 +132,13 @@ void RB_Tree<T>::fixAfterInsert(Node<T>* node) {
 				node = node->getParent()->getParent();								// zmienia wskaznik aktualne wezla odniesienia na dziadka
 			}
 			else {
-				if (node == node->getParent()->getLeft()) {
-					node = node->getParent();
-					rightRotation(node);
+				if (node == node->getParent()->getLeft()) {					// jesli node jest lewym synem  
+					node = node->getParent();						// przypisz aktualny node rodzicowi
+					rightRotation(node);							// wykonaj prawa rotacje
 				}
-				node->getParent()->setColor(0);
-				node->getParent()->getParent()->setColor(1);
-				leftRotation(node->getParent()->getParent());
+				node->getParent()->setColor(0);							// rodzic ma kolor czarny
+				node->getParent()->getParent()->setColor(1);					// dziadek ma czerwony
+				leftRotation(node->getParent()->getParent());					// rotuje w lewo
 			}
 		}
 	}                                                                                                                                                                                                      
