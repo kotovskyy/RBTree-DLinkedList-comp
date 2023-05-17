@@ -10,13 +10,13 @@ public:
 	RB_Tree();									// konstruktor
 	~RB_Tree();									// dekonstruktor
 
-	void insert(Node<T> * node);				// dodaje 
+	void insert(T value);				// dodaje 
 	void remove(Node<T>* node);					// usuwa
 	void search(T key);							// szuka
 	void leftRotation(Node<T>* x);				// rotuje w lewo
 	void rightRotation(Node<T>* x);				// rotuje w prawo
-	void fixAfterInsert(Node<T>* x);			// napiawia po dodaniu
-	void fixAfterRemove(Node<T>* x);			// naprawia po usuwaniu
+	void fixAfterInsert(Node<T>* node);			// napiawia po dodaniu
+	void fixAfterRemove(Node<T>* node);			// naprawia po usuwaniu
 
 };
 
