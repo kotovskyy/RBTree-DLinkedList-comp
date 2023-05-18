@@ -24,5 +24,16 @@ int main() {
     cout << ", rightleft:" << tree.getRoot()->getRight()->getLeft()->getValue() << "," << tree.getRoot()->getRight()->getLeft()->getColor();
     cout << ", rightright:" << tree.getRoot()->getRight()->getRight()->getValue() << "," << tree.getRoot()->getRight()->getRight()->getColor();
     cout << "\n, rightleftleft:" << tree.getRoot()->getRight()->getLeft()->getLeft()->getValue() << "," << tree.getRoot()->getRight()->getLeft()->getLeft()->getColor();
-}// insert dziala
+    // insert dziala
 
+    cout << "=================================================\n\n";
+    cout << "MIN: " << tree.minimum()->getValue();
+    cout << "\nMAX: " << tree.maximum()->getValue() << endl;
+    // min i max dzila
+    cout << "=================================================\n\n";
+    cout << "kolor noda o wartosci 9: " << tree.search(9)->getColor() << endl;
+    // search działa
+
+
+
+}

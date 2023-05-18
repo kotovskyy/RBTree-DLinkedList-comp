@@ -12,12 +12,13 @@ public:
 	Node<T>* getRoot();							// getter roota
 	void insert(T value);						// dodaje 
 	void remove(Node<T>* node);					// usuwa
-	void search(T key);							// szuka
 	void leftRotation(Node<T>* x);				// rotuje w lewo
 	void rightRotation(Node<T>* x);				// rotuje w prawo
 	void fixAfterInsert(Node<T>* node);			// napiawia po dodaniu
 	void fixAfterRemove(Node<T>* node);			// naprawia po usuwaniu
-
+	Node<T>* search(T key);						// szuka
+	Node<T>* minimum();							// znajduje minimum
+	Node<T>* maximum();							// znajduje maximum
 };
 
 #endif // !RB_TREE_H_

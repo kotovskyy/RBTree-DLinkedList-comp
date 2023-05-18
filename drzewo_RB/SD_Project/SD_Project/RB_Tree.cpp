@@ -1,5 +1,6 @@
 #include "RB_Tree.h"
 #include "Node.h"
+#include <iostream>
 
 template<class T>
 RB_Tree<T>::RB_Tree() {
@@ -46,12 +47,6 @@ void RB_Tree<T>::insert(T value){
 
 template<class T>
 void RB_Tree<T>::remove(Node<T>* node) {
-
-}
-
-template<class T>
-void RB_Tree<T>::search(T key) {
-
 
 }
 
@@ -149,5 +144,42 @@ template<class T>
 void RB_Tree<T>::fixAfterRemove(Node<T>* node) {
 
 }
+
+
+template<class T>
+Node<T>* RB_Tree<T>::search(T key) {
+	Node<T>* y = root;
+	while (y != nullptr) {
+		if (y->getValue() == key) {
+			return y;
+		}
+		else if (key < y->getValue()) {
+			y = y->getLeft();
+		}
+		else {
+			y = y->getRight();
+		}
+	}
+	return nullptr;
+}
+
+template<class T>
+Node<T>* RB_Tree<T>::minimum() {
+	Node<T>* y = root;
+	while (y->getLeft() != nullptr) {
+		y = y->getLeft();
+	}
+	return y;
+}
+
+template<class T>
+Node<T>* RB_Tree<T>::maximum() {
+	Node<T>* y = root;
+	while (y->getRight() != nullptr) {
+		y = y->getRight();
+	}
+	return y;
+}
+
 
 template class RB_Tree<int>;
