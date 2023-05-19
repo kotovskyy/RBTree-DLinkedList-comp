@@ -27,11 +27,11 @@ Node<T>* RB_Tree<T>::getRoot() {
 
 template<class T>
 void RB_Tree<T>::print(Node<T>* node) {
-	// prosta wersja algorytmu inorder tree traversal
-	if (node != nullptr) {						// jesli node nie jest nullptr
-		print(node->getLeft());					// wywolaj print() dla jego lewego poddrzewa
-		std::cout << "(" << node->getValue() << ", " << node->getColor() << ") ";   // po tym, jak wypisze lewe poddrzewo wypisz node
-		print(node->getRight());				// wywolaw print() dla prawego poddrzewa
+	// print dla testowania dzialania drzewa
+	if (node != nullptr) {					
+		print(node->getLeft());					
+		std::cout << "(" << node->getValue() << ", " << node->getColor() << ") ";   
+		print(node->getRight());				
 	}
 }
 
@@ -70,10 +70,10 @@ void RB_Tree<T>::transplant(Node<T>* first, Node<T>* second) {
 	if (first->getParent() == nullptr) {                 // jesli zamieniany node jest rootem
 		this->root = second;							 // ustaw second jako nowy root
 	}		
-	else if (first == first->getParent()->getLeft()) {
-		first->getParent()->setLeft(second);             // 
+	else if (first == first->getParent()->getLeft()) {	 // jesli zamieniany node jest lewym synem swojego rodzica
+		first->getParent()->setLeft(second);             
 	}
-	else {
+	else {												 // jesli zamieniany node jest prawym synem swojego rodzica		
 		first->getParent()->setRight(second);
 	}
 	if (second != nullptr) {
@@ -83,79 +83,81 @@ void RB_Tree<T>::transplant(Node<T>* first, Node<T>* second) {
 
 template<class T>
 void RB_Tree<T>::remove(Node<T>* node) {
-	Node<T>* y = node;
-	Node<T>* nil = new Node<T>();
-	Node<T>* x = new Node<T>();                     // node that contains child of y
-	bool y_orig_color = y->getColor();
-	if (node->getLeft() == nullptr) {
-		if (node->getRight() != nullptr) {
-			x = node->getRight();
+	Node<T>* y = node;								// node ktory zastapi 'node' po usunieciu
+	Node<T>* x = new Node<T>();                     // node pomocniczy; zawiera syna noda 'y' (z definicji moze byc max. 1 syn)
+	bool y_orig_color = y->getColor();				// kolor noda 'y' przed operacja 'remove'; jesli 0 - musimy zrobic fix; jesli 1 - nie musimy robic fixa;
+	if (node->getLeft() == nullptr) {				// jesli 'node' nie ma lewego syna
+		if (node->getRight() != nullptr) {			// jesli prawy syn nie jest nullptr
+			x = node->getRight();					
 		}
-		x->setParent(node);
-		transplant(node, node->getRight());		//x - y's child; takes y's place in the tree
+		x->setParent(node);							// ustaw 'node' jako rodzica x
+		transplant(node, node->getRight());		    // zamien noda 'node' jego prawym synem
 	}
-	else if (node->getRight() == nullptr) {
-		if (node->getLeft() != nullptr) {
+	else if (node->getRight() == nullptr) {			// jesli 'node' nie ma prawego syna
+		if (node->getLeft() != nullptr) {			// jesli lewy syn nie jest nullptr
 			x = node->getLeft();
 		}
-		x->setParent(node);
-		transplant(node, node->getLeft());
+		x->setParent(node);							// ustaw 'node' jako rodzica x
+		transplant(node, node->getLeft());			// zamien noda 'node' jego lewym synem
 	}
 	else {
-		y = minimum(node->getRight());
-		y_orig_color = y->getColor();
-		if (y->getRight() != nullptr) {
+		y = minimum(node->getRight());				// znajdz nastepce noda 'node' w prawym poddrzewie
+		y_orig_color = y->getColor();				// zapisz kolor noda 'y'
+		if (y->getRight() != nullptr) {				// jesli prawy syn nie jest nullptr
 			x = y->getRight();
 		}
-		x->setParent(y);
-		if (y != node->getRight()) {
-			transplant(y, y->getRight());
-			y->setRight(node->getRight());
-			y->getRight()->setParent(y);
+		x->setParent(y);							// ustaw 'y' jako rodzica x
+		if (y != node->getRight()) {				// jesli 'y' jest prawym synem 'node'
+			transplant(y, y->getRight());			// zamien noda 'y' jego prawym synem
+			y->setRight(node->getRight());			// ustaw prawego syna 'node' jako prawego syna 'y'
+			y->getRight()->setParent(y);			// ustaw 'y' jako rodzica prawego syna 'y'
 		}
-		else {
-			x->setParent(y);
-		}
-		transplant(node, y);
-		y->setLeft(node->getLeft());
-		y->getLeft()->setParent(y);
-		y->setColor(node->getColor());
+		transplant(node, y);						// zamien noda 'node' na 'y'
+		y->setLeft(node->getLeft());				// ustaw lewego syna 'node' jako lewego syna 'y'
+		y->getLeft()->setParent(y);					// ustaw 'y' jako rodzica lewego syna 'y'
+		y->setColor(node->getColor());				// zmien kolor 'y' na kolor 'node'
 	}
-	if (y_orig_color == 0) {
-		fixAfterRemove(x);
+	if (y_orig_color == 0) {						// jesli oryginalny kolor 'y' byl 0 (czarny) 
+		fixAfterRemove(x);							
 	}
 }
 
 template<class T>
 void RB_Tree<T>::fixAfterRemove(Node<T>* node) {
-	Node<T>* sibling = nullptr;
-	while ( (node != this->root) && (node->getColor() == 0)) {
-		if (node == node->getParent()->getLeft()) {
-			sibling = node->getParent()->getRight();
-			if (sibling->getColor() == 1) {
-				sibling->setColor(0);
-				node->getParent()->setColor(1);
-				leftRotation(node->getParent());
-				sibling = node->getParent()->getRight();
+	Node<T>* sibling = nullptr;										// pomocniczy node. zawiera 'brata' noda 'node'
+	while ( (node != this->root) && (node->getColor() == 0)) {		// dopóki 'node' nie jest rootem i nie jest czarnego koloru
+//===================JESLI JEST LEWYM SYNEM========================
+		if (node == node->getParent()->getLeft()){				
+			sibling = node->getParent()->getRight();				// ustaw brata jako prawego syna rodzica 'node'
+			if (sibling->getColor() == 1)							// jesli kolor brata jest czerwony
+			{
+				sibling->setColor(0);								// zmien kolor brata na czarny
+				node->getParent()->setColor(1);						// zmien kolor rodzica 'node' na czerwony
+				leftRotation(node->getParent());					// zrob lewy obrot dookola rodzica 'node'
+				sibling = node->getParent()->getRight();			
 			}
-			if ((sibling->getLeft()->getColor() == 0) && (sibling->getRight()->getColor() == 0)){
-				sibling->setColor(1);
-				node = node->getParent();
+			if ((sibling->getLeft()->getColor() == 0) &&			// jesli lewy syn brata jest czarny (AND)
+				(sibling->getRight()->getColor() == 0))				// prawy syn brata jest czarny
+			{
+				sibling->setColor(1);								// zmien kolor brata na czerwony
+				node = node->getParent();							// przesun wskaznik 'node' na 1 poziom wyzej
 			}
 			else {
-				if (sibling->getRight()->getColor() == 0) {
-					sibling->getLeft()->setColor(0);
-					sibling->setColor(1);
-					rightRotation(sibling);
-					sibling = node->getParent()->getRight();
+				if (sibling->getRight()->getColor() == 0) {			// jesli prawy syn brata jest czarny
+					sibling->getLeft()->setColor(0);				// zmien kolor lewego syna brata na czarny
+					sibling->setColor(1);							// zmien kolor brata na czerwony
+					rightRotation(sibling);							// zrob prawy obrot dookola brata
+					sibling = node->getParent()->getRight();		
 				}
-				sibling->setColor(node->getParent()->getColor());
-				node->getParent()->setColor(0);
-				sibling->getRight()->setColor(0);
-				leftRotation(node->getParent());
-				node = this->root;
+				sibling->setColor(node->getParent()->getColor());	// zmien kolor brata na kolor rodzica 'node'
+				node->getParent()->setColor(0);						// zmien kolor rodzica 'node' na czarny
+				sibling->getRight()->setColor(0);					// zmien kolor prawego syna 'sibling' na czarny
+				leftRotation(node->getParent());					// zrob lewy obrot dookola rodzica 'node'
+				node = this->root;									// ustaw 'node' jako root drzewa
 			}
-		}
+		} 
+//===================JESLI JEST PRAWYM SYNEM========================
+// ROZWIAZANIE SYMETRYCZNE JAK DLA LEWEGO SYNA. ZAMIENIAMY 'left' na 'right' i 'right' na 'left'
 		else {
 			sibling = node->getParent()->getLeft();
 			if (sibling->getColor() == 1) {
@@ -164,7 +166,8 @@ void RB_Tree<T>::fixAfterRemove(Node<T>* node) {
 				rightRotation(node->getParent());
 				sibling = node->getParent()->getLeft();
 			}
-			if ((sibling->getRight()->getColor() == 0) && (sibling->getLeft()->getColor() == 0)) {
+			if ((sibling->getRight()->getColor() == 0) &&
+				(sibling->getLeft()->getColor() == 0)) {
 				sibling->setColor(1);
 				node = node->getParent();
 			}
