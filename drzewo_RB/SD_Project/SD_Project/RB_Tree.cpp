@@ -14,6 +14,16 @@ template<class T>
 Node<T>* RB_Tree<T>::getRoot() {
 	return root;
 }
+
+template<class T>
+void RB_Tree<T>::print(Node<T>* node) {
+	if (node != nullptr) {
+		print(node->getLeft());
+		std::cout << node->getValue() << " ";
+		print(node->getRight());
+	}
+}
+
 template<class T>
 void RB_Tree<T>::insert(T value){
 	Node<T>* node = new Node<T>();			//tworzy nody node

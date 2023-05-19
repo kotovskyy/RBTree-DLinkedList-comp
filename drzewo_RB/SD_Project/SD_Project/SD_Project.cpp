@@ -34,6 +34,6 @@ int main() {
     cout << "kolor noda o wartosci 9: " << tree.search(9)->getColor() << endl;
     // search działa
 
-
+    tree.print(tree.getRoot());
 
 }

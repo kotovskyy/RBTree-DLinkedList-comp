@@ -19,6 +19,7 @@ public:
 	Node<T>* search(T key);						// szuka
 	Node<T>* minimum();							// znajduje minimum
 	Node<T>* maximum();							// znajduje maximum
+	void print(Node<T>* node);
 };
 
 #endif // !RB_TREE_H_
