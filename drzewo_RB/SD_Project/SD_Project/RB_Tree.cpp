@@ -17,16 +17,17 @@ Node<T>* RB_Tree<T>::getRoot() {
 
 template<class T>
 void RB_Tree<T>::print(Node<T>* node) {
-	if (node != nullptr) {
-		print(node->getLeft());
-		std::cout << node->getValue() << " ";
-		print(node->getRight());
+	// prosta wersja algorytmu inorder tree traversal
+	if (node != nullptr) {						// jesli node nie jest nullptr
+		print(node->getLeft());					// wywolaj print() dla jego lewego poddrzewa
+		std::cout << node->getValue() << " ";   // po tym, jak wypisze lewe poddrzewo wypisz node
+		print(node->getRight());				// wywolaw print() dla prawego poddrzewa
 	}
 }
 
 template<class T>
 void RB_Tree<T>::insert(T value){
-	Node<T>* node = new Node<T>();			//tworzy nody node
+	Node<T>* node = new Node<T>();			//tworzy nowy node
 	node->setValue(value);					// nadaje mu wartosc 
 	Node<T>* y = nullptr;						// node pomocniczy
 	Node<T>* x = root;						// wskaznik na root
@@ -55,11 +56,12 @@ void RB_Tree<T>::insert(T value){
 
 template<class T>
 void RB_Tree<T>::transplant(Node<T>* first, Node<T>* second) {
-	if (first->getParent() == nullptr) {
-		this->getRoot() = second;
-	} 
+	// Funkcja wstawia node second zamiast noda first
+	if (first->getParent() == nullptr) {                 // jesli zamieniany node jest rootem
+		this->root = second;							 // ustaw second jako nowy root
+	}		
 	else if (first = first->getParent()->getLeft()) {
-		first->getParent()->setLeft(second);
+		first->getParent()->setLeft(second);             // 
 	}
 	else {
 		first->getParent()->setRight(second);
@@ -71,7 +73,106 @@ void RB_Tree<T>::transplant(Node<T>* first, Node<T>* second) {
 
 template<class T>
 void RB_Tree<T>::remove(Node<T>* node) {
+	Node<T>* y = node;
+	Node<T>* x = nullptr;                      // node that contains child of y
+	bool y_orig_color = y->getColor();
+	if (node->getLeft() == nullptr) {
+		x = node->getRight();
+		//
+		x->setParent(node);
+		//
+		transplant(node, node->getRight());		//x - y's child; takes y's place in the tree
+	}
+	else if (node->getRight() == nullptr) {
+		x = node->getLeft();
+		//
+		x->setParent(node);
+		//
+		transplant(node, node->getLeft());
+	}
+	else {
+		y = minimum(node->getRight());
+		y_orig_color = y->getColor();
+		x = y->getRight();
+		//
+		x->setParent(y);
+		//
+		if (y != node->getRight()) {
+			transplant(y, y->getRight());
+			y->setRight(node->getRight());
+			y->getRight()->setParent(y);
+		}
+		else {
+			x->setParent(y);
+		}
+		transplant(node, y);
+		y->setLeft(node->getLeft());
+		y->getLeft()->setParent(y);
+		y->setColor(node->getColor());
+	}
+	if (y_orig_color == 0) {
+		fixAfterRemove(x);
+	}
+}
 
+template<class T>
+void RB_Tree<T>::fixAfterRemove(Node<T>* node) {
+	Node<T>* sibling = nullptr;
+	while ( (node != this->root) && (node->getColor() == 0)) {
+		if (node == node->getParent()->getLeft()) {
+			sibling = node->getParent()->getRight();
+			if (sibling->getColor() == 1) {
+				sibling->setColor(0);
+				node->getParent()->setColor(1);
+				leftRotation(node->getParent());
+				sibling = node->getParent()->getRight();
+			}
+			if ((sibling->getLeft()->getColor() == 0) && (sibling->getRight()->getColor() == 0)){
+				sibling->setColor(1);
+				node = node->getParent();
+			}
+			else {
+				if (sibling->getRight()->getColor() == 0) {
+					sibling->getLeft()->setColor(0);
+					sibling->setColor(1);
+					rightRotation(sibling);
+					sibling = node->getParent()->getRight();
+				}
+				sibling->setColor(node->getParent()->getColor());
+				node->getParent()->setColor(0);
+				sibling->getRight()->setColor(0);
+				leftRotation(node->getParent());
+				node = this->root;
+			}
+		}
+		else {
+			sibling = node->getParent()->getLeft();
+			if (sibling->getColor() == 1) {
+				sibling->setColor(0);
+				node->getParent()->setColor(1);
+				rightRotation(node->getParent());
+				sibling = node->getParent()->getLeft();
+			}
+			if ((sibling->getRight()->getColor() == 0) && (sibling->getLeft()->getColor() == 0)) {
+				sibling->setColor(1);
+				node = node->getParent();
+			}
+			else {
+				if (sibling->getLeft()->getColor() == 0) {
+					sibling->getRight()->setColor(0);
+					sibling->setColor(1);
+					leftRotation(sibling);
+					sibling = node->getParent()->getLeft();
+				}
+				sibling->setColor(node->getParent()->getColor());
+				node->getParent()->setColor(0);
+				sibling->getLeft()->setColor(0);
+				rightRotation(node->getParent());
+				node = this->root;
+			}
+		}
+	}
+	node->setColor(0);
 }
 
 template<class T>
@@ -125,10 +226,10 @@ void RB_Tree<T>::fixAfterInsert(Node<T>* node) {
 //==============JESLI JEST LEWYM SYNEM=======================
 		if (node->getParent() == node->getParent()->getParent()->getLeft()) {		// jesli node jest lewym synem 
 			y = node->getParent()->getParent()->getRight();							// ustawiamy y jako stryja
-			if (y != nullptr && y->getColor() == 1) {												// streyj jest czerwony
+			if (y != nullptr && y->getColor() == 1) {												// stryj jest czerwony
 				node->getParent()->setColor(0);								// ustawia ojca na czarno
 				y->setColor(0);												// ustawia stryja na czarano
-				node->getParent()->getParent()->setColor(1);					// ustawia dzidka na czerwono
+				node->getParent()->getParent()->setColor(1);					// ustawia dziadka na czerwono
 				node = node->getParent()->getParent();								// zmienia wskaznik aktualne wezla odniesienia na dziadka
 			}
 			else {
@@ -164,11 +265,6 @@ void RB_Tree<T>::fixAfterInsert(Node<T>* node) {
 	root->setColor(0);	//root musi byc czarny
 }
 
-template<class T>
-void RB_Tree<T>::fixAfterRemove(Node<T>* node) {
-
-}
-
 
 template<class T>
 Node<T>* RB_Tree<T>::search(T key) {
@@ -188,8 +284,8 @@ Node<T>* RB_Tree<T>::search(T key) {
 }
 
 template<class T>
-Node<T>* RB_Tree<T>::minimum() {
-	Node<T>* y = root;
+Node<T>* RB_Tree<T>::minimum(Node<T>* node) {
+	Node<T>* y = node;
 	while (y->getLeft() != nullptr) {
 		y = y->getLeft();
 	}
@@ -197,8 +293,8 @@ Node<T>* RB_Tree<T>::minimum() {
 }
 
 template<class T>
-Node<T>* RB_Tree<T>::maximum() {
-	Node<T>* y = root;
+Node<T>* RB_Tree<T>::maximum(Node<T>* node) {
+	Node<T>* y = node;
 	while (y->getRight() != nullptr) {
 		y = y->getRight();
 	}

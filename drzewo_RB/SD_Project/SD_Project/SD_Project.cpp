@@ -27,13 +27,15 @@ int main() {
     // insert dziala
 
     cout << "=================================================\n\n";
-    cout << "MIN: " << tree.minimum()->getValue();
-    cout << "\nMAX: " << tree.maximum()->getValue() << endl;
+    cout << "MIN: " << tree.minimum(tree.getRoot())->getValue();
+    cout << "\nMAX: " << tree.maximum(tree.getRoot())->getValue() << endl;
     // min i max dzila
     cout << "=================================================\n\n";
     cout << "kolor noda o wartosci 9: " << tree.search(9)->getColor() << endl;
     // search działa
 
+    tree.print(tree.getRoot());
+    tree.remove(tree.search(14));
     tree.print(tree.getRoot());
 
 }

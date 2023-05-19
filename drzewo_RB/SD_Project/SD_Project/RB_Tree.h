@@ -19,8 +19,8 @@ public:
 	void fixAfterInsert(Node<T>* node);			// napiawia po dodaniu
 	void fixAfterRemove(Node<T>* node);			// naprawia po usuwaniu
 	Node<T>* search(T key);						// szuka
-	Node<T>* minimum();							// znajduje minimum
-	Node<T>* maximum();							// znajduje maximum
+	Node<T>* minimum(Node<T>* node);			// znajduje minimum
+	Node<T>* maximum(Node<T>* node);			// znajduje maximum
 	void print(Node<T>* node);
 };
 
