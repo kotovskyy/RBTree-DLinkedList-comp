@@ -15,18 +15,28 @@ Node<T>* RB_Tree<T>::getRoot() {
 	return root;
 }
 
+//template<class T>
+//void RB_Tree<T>::print(Node<T>* node) {
+//	// prosta wersja algorytmu inorder tree traversal
+//	if (node != nullptr) {						// jesli node nie jest nullptr
+//		print(node->getLeft());					// wywolaj print() dla jego lewego poddrzewa
+//		std::cout << node->getValue() << " ";   // po tym, jak wypisze lewe poddrzewo wypisz node
+//		print(node->getRight());				// wywolaw print() dla prawego poddrzewa
+//	}
+//}
+
 template<class T>
 void RB_Tree<T>::print(Node<T>* node) {
 	// prosta wersja algorytmu inorder tree traversal
 	if (node != nullptr) {						// jesli node nie jest nullptr
 		print(node->getLeft());					// wywolaj print() dla jego lewego poddrzewa
-		std::cout << node->getValue() << " ";   // po tym, jak wypisze lewe poddrzewo wypisz node
+		std::cout << "(" << node->getValue() << ", " << node->getColor() << ") ";   // po tym, jak wypisze lewe poddrzewo wypisz node
 		print(node->getRight());				// wywolaw print() dla prawego poddrzewa
 	}
 }
 
 template<class T>
-void RB_Tree<T>::insert(T value){
+void RB_Tree<T>::insert(const T& value){
 	Node<T>* node = new Node<T>();			//tworzy nowy node
 	node->setValue(value);					// nadaje mu wartosc 
 	Node<T>* y = nullptr;						// node pomocniczy
@@ -60,7 +70,7 @@ void RB_Tree<T>::transplant(Node<T>* first, Node<T>* second) {
 	if (first->getParent() == nullptr) {                 // jesli zamieniany node jest rootem
 		this->root = second;							 // ustaw second jako nowy root
 	}		
-	else if (first = first->getParent()->getLeft()) {
+	else if (first == first->getParent()->getLeft()) {
 		first->getParent()->setLeft(second);             // 
 	}
 	else {
@@ -74,29 +84,30 @@ void RB_Tree<T>::transplant(Node<T>* first, Node<T>* second) {
 template<class T>
 void RB_Tree<T>::remove(Node<T>* node) {
 	Node<T>* y = node;
-	Node<T>* x = nullptr;                      // node that contains child of y
+	Node<T>* nil = new Node<T>();
+	Node<T>* x = new Node<T>();                     // node that contains child of y
 	bool y_orig_color = y->getColor();
 	if (node->getLeft() == nullptr) {
-		x = node->getRight();
-		//
+		if (node->getRight() != nullptr) {
+			x = node->getRight();
+		}
 		x->setParent(node);
-		//
 		transplant(node, node->getRight());		//x - y's child; takes y's place in the tree
 	}
 	else if (node->getRight() == nullptr) {
-		x = node->getLeft();
-		//
+		if (node->getLeft() != nullptr) {
+			x = node->getLeft();
+		}
 		x->setParent(node);
-		//
 		transplant(node, node->getLeft());
 	}
 	else {
 		y = minimum(node->getRight());
 		y_orig_color = y->getColor();
-		x = y->getRight();
-		//
+		if (y->getRight() != nullptr) {
+			x = y->getRight();
+		}
 		x->setParent(y);
-		//
 		if (y != node->getRight()) {
 			transplant(y, y->getRight());
 			y->setRight(node->getRight());
@@ -267,7 +278,7 @@ void RB_Tree<T>::fixAfterInsert(Node<T>* node) {
 
 
 template<class T>
-Node<T>* RB_Tree<T>::search(T key) {
+Node<T>* RB_Tree<T>::search(const T& key) {
 	Node<T>* y = root;
 	while (y != nullptr) {
 		if (y->getValue() == key) {
