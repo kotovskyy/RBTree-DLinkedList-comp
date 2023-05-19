@@ -50,8 +50,6 @@ void RB_Tree<T>::insert(T value){
 		y->setRight(node);
 	}
 	node->setColor(1);				// ustaw kolor dodanego noda na czerwony
-	node->setLeft(nullptr);
-	node->setRight(nullptr);
 	fixAfterInsert(node);				// napraw drzewo
 }
 
