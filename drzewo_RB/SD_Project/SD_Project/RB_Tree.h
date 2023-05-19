@@ -6,6 +6,8 @@ template<class T>
 class RB_Tree {
 	Node<T>* root;								// korzen drzewa
 	//Node<T>* nil;								// lisc drzewa
+protected:
+	void transplant(Node<T>* first, Node<T>* second);
 public:
 	RB_Tree();									// konstruktor
 	~RB_Tree();									// dekonstruktor

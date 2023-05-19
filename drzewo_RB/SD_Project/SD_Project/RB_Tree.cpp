@@ -54,6 +54,22 @@ void RB_Tree<T>::insert(T value){
 }
 
 template<class T>
+void RB_Tree<T>::transplant(Node<T>* first, Node<T>* second) {
+	if (first->getParent() == nullptr) {
+		this->getRoot() = second;
+	} 
+	else if (first = first->getParent()->getLeft()) {
+		first->getParent()->setLeft(second);
+	}
+	else {
+		first->getParent()->setRight(second);
+	}
+	if (second != nullptr) {
+		second->setParent(first->getParent());
+	}
+}
+
+template<class T>
 void RB_Tree<T>::remove(Node<T>* node) {
 
 }
