@@ -32,7 +32,10 @@ int main() {
     tree.insert(Character('e', 2));
     tree.insert(Character('f', 13));
 
+
     tree.print(tree.getRoot());
+
+    cout << tree.search('a')->getValue() << endl;
 
     return 0;
 }

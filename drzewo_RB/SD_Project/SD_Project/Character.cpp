@@ -27,12 +27,20 @@ bool Character::operator>=(const Character& other) {
 	return n_occurences >= other.n_occurences;
 }
 
+//bool Character::operator==(const Character& other) {
+//	return n_occurences == other.n_occurences;
+//}
+//
+//bool Character::operator!=(const Character& other) {
+//	return n_occurences != other.n_occurences;
+//}
+
 bool Character::operator==(const Character& other) {
-	return n_occurences == other.n_occurences;
+	return value == other.value;
 }
 
 bool Character::operator!=(const Character& other) {
-	return n_occurences != other.n_occurences;
+	return value != other.value;
 }
 
 std::ostream& operator<<(std::ostream& os, const Character& character) {
