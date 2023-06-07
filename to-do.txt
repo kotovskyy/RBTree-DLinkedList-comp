@@ -1,0 +1,2 @@
+Stworzyć klasę Character; drzewo jest generic, także będzie w stanie przechować obiekty dowolnej klasy.
+W klasie przeciążyć operatory porównania oraz ostream
