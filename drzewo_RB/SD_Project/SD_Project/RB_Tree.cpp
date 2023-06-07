@@ -26,13 +26,19 @@ Node<T>* RB_Tree<T>::getRoot() {
 //}
 
 template<class T>
-void RB_Tree<T>::print(Node<T>* node) {
+void RB_Tree<T>::printInner(Node<T>* node) {
 	// print dla testowania dzialania drzewa
 	if (node != nullptr) {					
-		print(node->getLeft());					
+		printInner(node->getLeft());					
 		std::cout << "(" << node->getValue() << ", " << node->getColor() << ") ";   
-		print(node->getRight());				
+		printInner(node->getRight());				
 	}
+}
+
+template<class T>
+void RB_Tree<T>::print(Node<T>* node) {
+	printInner(node);
+	std::cout << std::endl;
 }
 
 template<class T>
@@ -281,7 +287,7 @@ void RB_Tree<T>::fixAfterInsert(Node<T>* node) {
 
 
 template<class T>
-Node<T>* RB_Tree<T>::search(const T& key) {
+Node<T>* RB_Tree<T>::search(const T& key)  {
 	Node<T>* y = root;
 	while (y != nullptr) {
 		if (y->getValue() == key) {
@@ -317,3 +323,4 @@ Node<T>* RB_Tree<T>::maximum(Node<T>* node) {
 
 
 template class RB_Tree<int>;
+template class RB_Tree<Character>;

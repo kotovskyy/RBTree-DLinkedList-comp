@@ -1,6 +1,7 @@
 #ifndef RB_TREE_H_
 #define RB_TREE_H_
 #include "Node.h"
+#include "Character.h"
 
 template<class T>
 class RB_Tree {
@@ -8,6 +9,7 @@ class RB_Tree {
 	//Node<T>* nil;								// lisc drzewa
 protected:
 	void transplant(Node<T>* first, Node<T>* second);
+	void printInner(Node<T>* node);
 public:
 	RB_Tree();									// konstruktor
 	~RB_Tree();									// dekonstruktor

@@ -64,3 +64,4 @@ Node<T>* Node<T>::getRight() {
 }
 
 template class Node<int>;
+template class Node<Character>;
