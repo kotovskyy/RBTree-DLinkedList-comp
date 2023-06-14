@@ -1,41 +1,30 @@
 ﻿#include <iostream>
-#include "Node.h"
 #include "RB_Tree.h"
-#include "Character.h"
+#include <string>
+#include <vector>
 
 using namespace std;
 
+void read_text(RB_Tree<Character>& tree, char letters[], int counters[]) {
+    for (int i = 0; i < 14; i++) {
+        tree.insert(letters[i], counters[i]);
+    }
+}
+
 int main() {
     RB_Tree<Character> tree;
-    //tree.insert(25);
-    //tree.insert(11);
-    //tree.insert(17);
-    //tree.insert(4);
-    //tree.insert(15);
-    //tree.insert(19); 
-    //tree.insert(52);
-    //tree.insert(34);
-    //tree.insert(39);
-    //tree.insert(28);
-    //tree.insert(31);
-    //tree.insert(63);
-    //tree.insert(69);
-
-    tree.insert(Character('a', 15));
-    tree.insert(Character('b', 12));
-    tree.insert(Character('c', 17));
-
-
-    tree.print(tree.getRoot());
-
-    tree.insert(Character('d', 14));
-    tree.insert(Character('e', 2));
-    tree.insert(Character('f', 13));
-
-
+    char letters[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'w', 'z', 'v', 'm'};
+    int counters[] = { 54, 23, 11, 24, 36, 49, 23, 41, 45, 22, 63, 31, 29, 12 };
+    read_text(tree, letters, counters);
     tree.print(tree.getRoot());
 
     cout << tree.search('a')->getValue() << endl;
+
+    cout << tree.search('d')->getValue() << endl;
+
+    tree.remove(tree.search('w'));
+
+    tree.print(tree.getRoot());
 
     return 0;
 }

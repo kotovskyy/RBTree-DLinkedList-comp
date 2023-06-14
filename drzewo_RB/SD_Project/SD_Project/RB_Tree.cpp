@@ -5,6 +5,9 @@
 template<class T>
 RB_Tree<T>::RB_Tree() {
 	root = nullptr;
+	for (int i = 0; i < 256; i++) {
+		occurence_times[i] = 0;
+	}
 }
 
 template<class T>
@@ -43,12 +46,57 @@ void RB_Tree<T>::print(Node<T>* node) {
 
 template<class T>
 void RB_Tree<T>::insert(const T& value){
+	if (occurence_times[int(value.getChar())] == 0) {
+		occurence_times[int(value.getChar())] += value.getOccurences();
+		Node<T>* node = new Node<T>();			//tworzy nowy node
+		node->setValue(value);					// nadaje mu wartosc 
+		Node<T>* y = nullptr;						// node pomocniczy
+		Node<T>* x = root;						// wskaznik na root
+		while (!(x == nullptr)) {						// dopuki x jest jest lisciem
+			y = x;
+			if (node->getValue() < x->getValue()) {	// jesli wartoœc dodawanego noda jest mniejsza to ptrzesun w lewo
+				x = x->getLeft();
+			}
+			else {									 // jesli wartoœc dodawanego noda jest wieksza to ptrzesun w prawo
+				x = x->getRight();
+			}
+		}
+		node->setParent(y);					// ustaw y jako rodzica
+		if (y == nullptr) {								// jesli y == 0 to nowy node jest korzeniem
+			root = node;
+		}
+		else if (node->getValue() < y->getValue()) {	// jesli wartoœc dodawanego noda jest mniejsza od rodzica to jest lewym synam	
+			y->setLeft(node);
+		}
+		else {											// jesli wartoœc dodawanego noda jest wieksza od rodzica to jest prawym synam
+			y->setRight(node);
+		}
+		node->setColor(1);				// ustaw kolor dodanego noda na czerwony
+
+		fixAfterInsert(node);
+	}
+	else {
+		int occured = occurence_times[int(value.getChar())];
+		char cval = value.getChar();
+		occurence_times[cval] += 1;
+		Character nChar(cval, occured);
+		Node<T>* node = search(cval);
+		node->getValue().addOccurences();
+
+		fixAfterInsert(node);
+	}
+				// napraw drzewo
+}
+
+template<class T>
+void RB_Tree<T>::insert(char char_value, int nOccur) {
+	occurence_times[char_value] += nOccur;
 	Node<T>* node = new Node<T>();			//tworzy nowy node
-	node->setValue(value);					// nadaje mu wartosc 
+	node->setValue(Character(char_value, occurence_times[char_value]));					// nadaje mu wartosc 
 	Node<T>* y = nullptr;						// node pomocniczy
 	Node<T>* x = root;						// wskaznik na root
 	while (!(x == nullptr)) {						// dopuki x jest jest lisciem
-		y = x;								
+		y = x;
 		if (node->getValue() < x->getValue()) {	// jesli wartoœc dodawanego noda jest mniejsza to ptrzesun w lewo
 			x = x->getLeft();
 		}
@@ -67,8 +115,10 @@ void RB_Tree<T>::insert(const T& value){
 		y->setRight(node);
 	}
 	node->setColor(1);				// ustaw kolor dodanego noda na czerwony
-	fixAfterInsert(node);				// napraw drzewo
+
+	fixAfterInsert(node);
 }
+
 
 template<class T>
 void RB_Tree<T>::transplant(Node<T>* first, Node<T>* second) {
@@ -95,15 +145,15 @@ void RB_Tree<T>::remove(Node<T>* node) {
 	if (node->getLeft() == nullptr) {				// jesli 'node' nie ma lewego syna
 		if (node->getRight() != nullptr) {			// jesli prawy syn nie jest nullptr
 			x = node->getRight();					
-		}
-		x->setParent(node);							// ustaw 'node' jako rodzica x
+		}							
+		x->setParent(node->getParent());            // ustaw rodzica 'node' jako rodzica x
 		transplant(node, node->getRight());		    // zamien noda 'node' jego prawym synem
 	}
 	else if (node->getRight() == nullptr) {			// jesli 'node' nie ma prawego syna
 		if (node->getLeft() != nullptr) {			// jesli lewy syn nie jest nullptr
 			x = node->getLeft();
-		}
-		x->setParent(node);							// ustaw 'node' jako rodzica x
+		}											// ustaw 'node' jako rodzica x
+		x->setParent(node->getParent());
 		transplant(node, node->getLeft());			// zamien noda 'node' jego lewym synem
 	}
 	else {
@@ -131,9 +181,9 @@ void RB_Tree<T>::remove(Node<T>* node) {
 template<class T>
 void RB_Tree<T>::fixAfterRemove(Node<T>* node) {
 	Node<T>* sibling = nullptr;										// pomocniczy node. zawiera 'brata' noda 'node'
-	while ( (node != this->root) && (node->getColor() == 0)) {		// dopóki 'node' nie jest rootem i nie jest czarnego koloru
+	while ( (node != this->root) && ((node == nullptr) || (node->getColor() == 0))) {		// dopóki 'node' nie jest rootem i nie jest czarnego koloru
 //===================JESLI JEST LEWYM SYNEM========================
-		if (node == node->getParent()->getLeft()){				
+		if ((node == node->getParent()->getLeft()) || (node->getParent()->getLeft() == nullptr)){				
 			sibling = node->getParent()->getRight();				// ustaw brata jako prawego syna rodzica 'node'
 			if (sibling->getColor() == 1)							// jesli kolor brata jest czerwony
 			{
@@ -142,14 +192,14 @@ void RB_Tree<T>::fixAfterRemove(Node<T>* node) {
 				leftRotation(node->getParent());					// zrob lewy obrot dookola rodzica 'node'
 				sibling = node->getParent()->getRight();			
 			}
-			if ((sibling->getLeft()->getColor() == 0) &&			// jesli lewy syn brata jest czarny (AND)
-				(sibling->getRight()->getColor() == 0))				// prawy syn brata jest czarny
+			if (((sibling->getRight() == nullptr) || (sibling->getRight()->getColor() == 0)) && // jesli lewy syn brata jest czarny (AND)
+				((sibling->getLeft() == nullptr) || (sibling->getLeft()->getColor() == 0)))			// prawy syn brata jest czarny
 			{
 				sibling->setColor(1);								// zmien kolor brata na czerwony
 				node = node->getParent();							// przesun wskaznik 'node' na 1 poziom wyzej
 			}
 			else {
-				if (sibling->getRight()->getColor() == 0) {			// jesli prawy syn brata jest czarny
+				if (sibling->getRight() == nullptr || sibling->getRight()->getColor() == 0) {			// jesli prawy syn brata jest czarny
 					sibling->getLeft()->setColor(0);				// zmien kolor lewego syna brata na czarny
 					sibling->setColor(1);							// zmien kolor brata na czerwony
 					rightRotation(sibling);							// zrob prawy obrot dookola brata
@@ -172,8 +222,8 @@ void RB_Tree<T>::fixAfterRemove(Node<T>* node) {
 				rightRotation(node->getParent());
 				sibling = node->getParent()->getLeft();
 			}
-			if ((sibling->getRight()->getColor() == 0) &&
-				(sibling->getLeft()->getColor() == 0)) {
+			if (((sibling->getRight() == nullptr) || (sibling->getRight()->getColor() == 0)) &&
+				((sibling->getLeft() == nullptr) || (sibling->getLeft()->getColor() == 0))) {
 				sibling->setColor(1);
 				node = node->getParent();
 			}
@@ -193,6 +243,8 @@ void RB_Tree<T>::fixAfterRemove(Node<T>* node) {
 		}
 	}
 	node->setColor(0);
+
+
 }
 
 template<class T>
@@ -286,14 +338,35 @@ void RB_Tree<T>::fixAfterInsert(Node<T>* node) {
 }
 
 
+//template<class T>
+//Node<T>* RB_Tree<T>::search(T& key)  {
+//	key.setOccurences(occurence_times[key.getChar()]);
+//	std::cout << key << std::endl;
+//	Node<T>* y = root;
+//	while (y != nullptr) {
+//		if (y->getValue() == key) {
+//			return y;
+//		}
+//		else if (y->getValue() > key) {
+//			y = y->getLeft();
+//		}
+//		else {
+//			y = y->getRight();
+//		}
+//	}
+//	return nullptr;
+//}
+
 template<class T>
-Node<T>* RB_Tree<T>::search(const T& key)  {
+Node<T>* RB_Tree<T>::search(char value) {
+	int nOcc = occurence_times[value];
+	std::cout << "Value: " << value << " Nocc = " << nOcc << std::endl;
 	Node<T>* y = root;
 	while (y != nullptr) {
-		if (y->getValue() == key) {
+		if (y->getValue() == value) {
 			return y;
 		}
-		else if (key < y->getValue()) {
+		else if (y->getValue() > nOcc) {
 			y = y->getLeft();
 		}
 		else {
@@ -322,5 +395,5 @@ Node<T>* RB_Tree<T>::maximum(Node<T>* node) {
 }
 
 
-template class RB_Tree<int>;
+//template class RB_Tree<int>;
 template class RB_Tree<Character>;
