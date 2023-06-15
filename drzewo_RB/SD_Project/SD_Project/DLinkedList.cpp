@@ -31,7 +31,14 @@ void DLinkedList<T>::print() const {
 
 template<typename T>
 DListNode<T>* DLinkedList<T>::search(const char& value) const {
-
+    DListNode<T>* current = head->next;
+    while (current != tail) {
+        if (current->value.getChar() == value) {
+            return current;
+        }
+        current = current->next;
+    }
+    return nullptr;
 }
 
 template<typename T>

@@ -21,8 +21,8 @@ public:
     void print() const;
     void removeFront();
     void removeBack();
-    DListNode<T>* DLinkedList<T>::search(const char& value) const;
-    const T;
+    //IMPLEMENT SEARCH FUNCTION
+    DListNode<T>* search(const char& value) const;
 protected:
     void add(DListNode<T>* v, const T& value);
     void remove(DListNode<T>* v);

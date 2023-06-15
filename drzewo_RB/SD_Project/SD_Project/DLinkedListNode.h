@@ -1,5 +1,6 @@
 #ifndef DLINKEDLISTNODE_H
 #define DLINKEDLISTNODE_H
+#include "Character.h"
 
 template<typename T>
 class DListNode {
@@ -9,6 +10,8 @@ private:
     DListNode<T>* prev;
     template<typename U>
     friend class DLinkedList;
+public:
+    T getValue();
 };
 
 #endif

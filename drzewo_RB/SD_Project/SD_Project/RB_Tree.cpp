@@ -46,46 +46,33 @@ void RB_Tree<T>::print(Node<T>* node) {
 
 template<class T>
 void RB_Tree<T>::insert(const T& value){
-	if (occurence_times[int(value.getChar())] == 0) {
-		occurence_times[int(value.getChar())] += value.getOccurences();
-		Node<T>* node = new Node<T>();			//tworzy nowy node
-		node->setValue(value);					// nadaje mu wartosc 
-		Node<T>* y = nullptr;						// node pomocniczy
-		Node<T>* x = root;						// wskaznik na root
-		while (!(x == nullptr)) {						// dopuki x jest jest lisciem
-			y = x;
-			if (node->getValue() < x->getValue()) {	// jesli wartoœc dodawanego noda jest mniejsza to ptrzesun w lewo
-				x = x->getLeft();
-			}
-			else {									 // jesli wartoœc dodawanego noda jest wieksza to ptrzesun w prawo
-				x = x->getRight();
-			}
+	occurence_times[int(value.getChar())] += value.getOccurences();
+	Node<T>* node = new Node<T>();			//tworzy nowy node
+	node->setValue(value);					// nadaje mu wartosc 
+	Node<T>* y = nullptr;						// node pomocniczy
+	Node<T>* x = root;						// wskaznik na root
+	while (!(x == nullptr)) {						// dopuki x jest jest lisciem
+		y = x;
+		if (node->getValue() < x->getValue()) {	// jesli wartoœc dodawanego noda jest mniejsza to ptrzesun w lewo
+			x = x->getLeft();
 		}
-		node->setParent(y);					// ustaw y jako rodzica
-		if (y == nullptr) {								// jesli y == 0 to nowy node jest korzeniem
-			root = node;
+		else {									 // jesli wartoœc dodawanego noda jest wieksza to ptrzesun w prawo
+			x = x->getRight();
 		}
-		else if (node->getValue() < y->getValue()) {	// jesli wartoœc dodawanego noda jest mniejsza od rodzica to jest lewym synam	
-			y->setLeft(node);
-		}
-		else {											// jesli wartoœc dodawanego noda jest wieksza od rodzica to jest prawym synam
-			y->setRight(node);
-		}
-		node->setColor(1);				// ustaw kolor dodanego noda na czerwony
-
-		fixAfterInsert(node);
 	}
-	else {
-		int occured = occurence_times[int(value.getChar())];
-		char cval = value.getChar();
-		occurence_times[cval] += 1;
-		Character nChar(cval, occured);
-		Node<T>* node = search(cval);
-		node->getValue().addOccurences();
-
-		fixAfterInsert(node);
+	node->setParent(y);					// ustaw y jako rodzica
+	if (y == nullptr) {								// jesli y == 0 to nowy node jest korzeniem
+		root = node;
 	}
-				// napraw drzewo
+	else if (node->getValue() < y->getValue()) {	// jesli wartoœc dodawanego noda jest mniejsza od rodzica to jest lewym synam	
+		y->setLeft(node);
+	}
+	else {											// jesli wartoœc dodawanego noda jest wieksza od rodzica to jest prawym synam
+		y->setRight(node);
+	}
+	node->setColor(1);				// ustaw kolor dodanego noda na czerwony
+
+	fixAfterInsert(node);
 }
 
 template<class T>
@@ -338,29 +325,28 @@ void RB_Tree<T>::fixAfterInsert(Node<T>* node) {
 }
 
 
-//template<class T>
-//Node<T>* RB_Tree<T>::search(T& key)  {
-//	key.setOccurences(occurence_times[key.getChar()]);
-//	std::cout << key << std::endl;
-//	Node<T>* y = root;
-//	while (y != nullptr) {
-//		if (y->getValue() == key) {
-//			return y;
-//		}
-//		else if (y->getValue() > key) {
-//			y = y->getLeft();
-//		}
-//		else {
-//			y = y->getRight();
-//		}
-//	}
-//	return nullptr;
-//}
+template<class T>
+Node<T>* RB_Tree<T>::search(T& key)  {
+	key.setOccurences(occurence_times[key.getChar()]);
+	std::cout << key << std::endl;
+	Node<T>* y = root;
+	while (y != nullptr) {
+		if (y->getValue() == key) {
+			return y;
+		}
+		else if (y->getValue() > key) {
+			y = y->getLeft();
+		}
+		else {
+			y = y->getRight();
+		}
+	}
+	return nullptr;
+}
 
 template<class T>
 Node<T>* RB_Tree<T>::search(char value) {
 	int nOcc = occurence_times[value];
-	std::cout << "Value: " << value << " Nocc = " << nOcc << std::endl;
 	Node<T>* y = root;
 	while (y != nullptr) {
 		if (y->getValue() == value) {
@@ -394,6 +380,4 @@ Node<T>* RB_Tree<T>::maximum(Node<T>* node) {
 	return y;
 }
 
-
-//template class RB_Tree<int>;
 template class RB_Tree<Character>;

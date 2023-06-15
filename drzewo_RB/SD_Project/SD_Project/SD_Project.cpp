@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include "RB_Tree.h"
+#include "DLinkedList.h"
 #include <string>
 #include <vector>
 #include <fstream>
@@ -62,6 +63,7 @@ void count_chars(const std::string& text, char characters[], int occurrences[], 
 
 int main() {
     RB_Tree<Character> tree;
+    DLinkedList<Character> list;
 
     const int MAX_SIZE = 26;
     char characters[MAX_SIZE];
@@ -71,21 +73,21 @@ int main() {
     std::string text = "";
 
     read_from_file("exampleText.txt", text);
-    std::cout << "Original text: \n" << text << std::endl;
-
     text = filter_text(text);
-    std::cout << "Filtered text: \n" << text << std::endl;
-
     count_chars(text, characters, char_counters, count);
-    for (int i = 0; i < count; i++) {
-        cout << characters[i] << " : " << char_counters[i] << endl;
-    }
 
     for (int i = 0; i < count; i++) {
         tree.insert(characters[i], char_counters[i]);
     }
 
-    tree.print(tree.getRoot());
+    for (int i = 0; i < count; i++) {
+        list.addBack(characters[i], char_counters[i]);
+    }
+
+    char char_to_search = 'b';
+
+    cout << "TREE " << char_to_search << " character: " << tree.search(char_to_search)->getValue() << endl;
+    cout << "LIST " << char_to_search << " character: " << list.search(char_to_search)->getValue() << endl;
 
 
     return 0;

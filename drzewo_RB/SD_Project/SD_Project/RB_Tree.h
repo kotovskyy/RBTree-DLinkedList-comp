@@ -21,7 +21,7 @@ public:
 	void rightRotation(Node<T>* x);				// rotuje w prawo
 	void fixAfterInsert(Node<T>* node);			// napiawia po dodaniu
 	void fixAfterRemove(Node<T>* node);			// naprawia po usuwaniu
-	//Node<T>* search(T& key);				// szuka
+	Node<T>* search(T& key);				    // szuka
 	Node<T>* search(char value);				// szuka
 	Node<T>* minimum(Node<T>* node);			// znajduje minimum
 	Node<T>* maximum(Node<T>* node);			// znajduje maximum
