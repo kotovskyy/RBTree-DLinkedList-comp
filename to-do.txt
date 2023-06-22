@@ -1,0 +1,7 @@
+Stworzyć klasę Character; drzewo jest generic, także będzie w stanie przechować obiekty dowolnej klasy.
+W klasie przeciążyć operatory porównania oraz ostream
+DONE ===================================
+dodać tablice intów, która by reprezentowała ilość wystąpień znaku. number indeksu w tabilcy = wartość ascii chara.
+tablica może być np. 500 elementów
+
+otrzymujemy rozwiązanie w O(1).
